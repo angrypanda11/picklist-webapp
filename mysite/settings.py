@@ -25,7 +25,9 @@ SECRET_KEY = '^p*5+3zis6^r+n*7j69g+uqa=at7mqscbb#08r0qaly2rw&2-g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'picklist-app.herokuapp.com',
+]
 
 
 # Application definition
