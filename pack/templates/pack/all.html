@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+
+<a class="btn btn-primary" href="{% url 'upload' %}">HOME</a>
+
+<br>
+<br>
+<a class="btn btn-primary" href="{% url 'detail' 1 %}">GO TO PICK LIST 1</a>
+
+<br>
+<br>
+
+<table>
+    <tr>
+        <th>batch_id</th>
+        <th>order_number</th>
+        <th>sku</th>
+        <th>quantity</th>
+
+    </tr>
+    {% for order in sorted %}
+    <tr>
+        <td>{{ order.batch_id }}</td>
+        <td>{{ order.order_number }}</td>
+        <td>{{ order.sku }}</td>
+        <td>{{ order.quantity }}</td>
+
+    </tr>
+    {% endfor %}
+</table>
+<br>
+<br>
+
+
+{% endblock %}

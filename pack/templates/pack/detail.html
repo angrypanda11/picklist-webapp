@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a class="btn btn-primary" href="{% url 'upload' %}">HOME</a>
+
+<br>
+<br>
+
+<ul>
+    <li>Batch ID: {{ order.batch_id }}</li>
+    <li>Order Number: {{ order.order_number }}</li>
+    <li>SKU: {{ order.sku }}</li>
+    <li>Quantity: {{ order.quantity }}</li>
+
+</ul>
+
+<a class="btn btn-delete" href="{% url 'detail' prev %}">PREV</a>
+<a class="btn btn-primary" href="{% url 'detail' next %}">NEXT</a>
+
+
+
+{% endblock %}

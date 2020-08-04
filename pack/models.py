@@ -6,7 +6,7 @@ class Order(models.Model):
     batch_id = models.CharField(max_length=50)
     order_number = models.CharField(max_length=50)
     sku = models.CharField(max_length=50)
-    quantity = models.IntegerField(default=0)
+    quantity = models.CharField(max_length=50)
 
     def __str__(self):
         return self.batch_id
