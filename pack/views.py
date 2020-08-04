@@ -52,7 +52,7 @@ def detail(request, number):
     # query_results = Order.objects.all()
 
     sku_sorted = Order.objects.order_by('sku')
-    if sku_sorted.count() - 1 < number or number < 1:
+    if sku_sorted.count() < number or number < 1:
         return HttpResponse("Invalid page, return to last page")
     sku_index = sku_sorted[number-1]
 
