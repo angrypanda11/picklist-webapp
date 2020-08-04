@@ -17,6 +17,19 @@
 <br>
 <br>
 
+<script type="text/javascript">
+    function goToPage(){
+        var page=document.getElementById('in').value; // value of input box
+        page=page*1; // ensures page is numeric only
+        location.href='https://picklist-app.herokuapp.com/pack/'+page; // redirect to new url
+    }
+</script>
+<input type="text" id="in"/>
+<input type="button" onclick="goToPage();" value="Go to this order"/>
+
+<br>
+<br>
+
 <table>
     <tr>
         <th>batch_id</th>
