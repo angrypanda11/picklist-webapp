@@ -7,7 +7,7 @@
 
 
 <div class="alert alert-{{ message.tags }}" role="alert">
-    <p{% if message.tags %} class=""{% endif %}>{{ message }}</p>
+    <p{% if message.tags %} class=""{% endif %}> {{ message }}</p>
 </div>
 
 {%endfor%}
@@ -17,11 +17,11 @@
     {% csrf_token %}
 
     <input type="file" name="myfile">
-    <button type="submit">Upload</button>
+    <button type="submit">上传</button>
 </form>
 
 <br>
-<a class="btn btn-primary" href="{% url 'all' %}">All Uploaded Orders</a>
+<a class="btn btn-primary" href="{% url 'all' %}">所有上传订单</a>
 
 <br>
 <br>
@@ -34,6 +34,6 @@
     }
 </script>
 <input type="text" id="in"/>
-<input type="button" onclick="goToPage();" value="Go to this order"/>
+<input type="button" onclick="goToPage();" value="搜索"/>
 
 {% endblock %}

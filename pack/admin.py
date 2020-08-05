@@ -8,4 +8,4 @@ from .models import Order
 
 @admin.register(Order)
 class OrderResource(ImportExportModelAdmin):
-    list_display = ('batch_id', 'order_number', 'sku', 'quantity')
+    list_display = ('batch_id', 'order_number', 'sku', 'quantity', 'picked', 'notes')

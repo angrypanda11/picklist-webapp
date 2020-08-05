@@ -8,11 +8,11 @@
 }
 </style>
 
-<a class="btn btn-primary" href="{% url 'upload' %}">HOME</a>
+<a class="btn btn-primary" href="{% url 'upload' %}">主页</a>
 
 <br>
 <br>
-<a class="btn btn-primary" href="{% url 'detail' 1 %}">GO TO PICK LIST 1</a>
+<a class="btn btn-primary" href="{% url 'detail' 1 %}">浏览PICKLIST</a>
 
 <br>
 <br>
@@ -25,17 +25,19 @@
     }
 </script>
 <input type="text" id="in"/>
-<input type="button" onclick="goToPage();" value="Go to this order"/>
+<input type="button" onclick="goToPage();" value="搜索页数"/>
 
 <br>
 <br>
 
 <table>
     <tr>
-        <th>batch_id</th>
-        <th>order_number</th>
+        <th>串号</th>
+        <th>订单号</th>
         <th>sku</th>
-        <th>quantity</th>
+        <th>数量</th>
+        <th>状态</th>
+        <th>备注</th>
 
     </tr>
     {% for order in sorted %}
@@ -44,6 +46,8 @@
         <td>{{ order.order_number }}</td>
         <td>{{ order.sku }}</td>
         <td>{{ order.quantity }}</td>
+        <td>{{ order.picked }}</td>
+        <td>{{ order.notes }}</td>
 
     </tr>
     {% endfor %}

@@ -1,12 +1,14 @@
 from django.shortcuts import get_object_or_404, render
 from .models import Order
-# from .resources import OrderResource
 from django.contrib import messages
-# from tablib import Dataset
+from .forms import OrderUpdateForm
 from django.http import HttpResponse
 import io
 import csv
-from django.views import generic
+# from django.views import generic
+# from tablib import Dataset
+# from .resources import OrderResource
+
 
 
 def upload(request):
@@ -56,9 +58,29 @@ def detail(request, number):
         return HttpResponse("Invalid page, return to last page")
     sku_index = sku_sorted[number-1]
 
+    form = OrderUpdateForm(request.POST or None, instance=sku_index)
+
+    if form.is_valid():
+        form.save()
+
     context = {
         'order': sku_index,
         'next': number+1,
-        'prev': number-1
+        'prev': number-1,
+        'number': number,
+        'total': sku_sorted.count(),
+        'form': form
     }
     return render(request, 'pack/detail.html', context)
+
+
+# def order_update_view(request, number):
+#     sku_sorted = Order.objects.order_by('sku')[number]
+#     form = OrderUpdateForm(request.POST or None, instance=sku_sorted)
+#
+#     if form.is_valid():
+#         form.save()
+#
+#     context = {'form': form}
+#
+#     return render(request, 'pack/detail.html', context)
