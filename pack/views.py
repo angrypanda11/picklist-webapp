@@ -35,7 +35,7 @@ def upload(request):
             sku=column[88],
             quantity=column[75],
         )
-        # print(column[76])
+
     context = {}
     return render(request, template, context)
 
