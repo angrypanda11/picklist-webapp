@@ -42,11 +42,11 @@ def upload(request):
 
 def all_orders(request):
     sku_sorted = Order.objects.order_by('sku')
-    first_item = sku_sorted.values_list('sku', flat=True)[0]
+    # first_item = sku_sorted.values_list('sku', flat=True)[0]
 
     context = {
         'sorted': sku_sorted,
-        'first': first_item
+        # 'first': first_item
     }
     return render(request, 'pack/all.html', context)
 
