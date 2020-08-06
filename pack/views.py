@@ -10,7 +10,6 @@ import csv
 # from .resources import OrderResource
 
 
-
 def upload(request):
     template = "pack/upload.html"
     prompt = {
@@ -43,17 +42,19 @@ def upload(request):
 
 def all_orders(request):
     sku_sorted = Order.objects.order_by('sku')
-    context = {'sorted': sku_sorted}
+    first_item = sku_sorted.values_list('sku', flat=True)[0]
+
+    context = {
+        'sorted': sku_sorted,
+        'first': first_item
+    }
     return render(request, 'pack/all.html', context)
 
 
 def detail(request, number):
     number = int(number)
-    # order = get_object_or_404(Order, pk=order_id)
-    # order = Order.objects.raw('SELECT * FROM pack_order')[number]
-    # query_results = Order.objects.all()
-
     sku_sorted = Order.objects.order_by('sku')
+
     if sku_sorted.count() < number or number < 1:
         return HttpResponse("Invalid page, return to last page")
     sku_index = sku_sorted[number-1]
@@ -62,6 +63,7 @@ def detail(request, number):
 
     if form.is_valid():
         form.save()
+        form = OrderUpdateForm()
 
     context = {
         'order': sku_index,
@@ -74,13 +76,6 @@ def detail(request, number):
     return render(request, 'pack/detail.html', context)
 
 
-# def order_update_view(request, number):
-#     sku_sorted = Order.objects.order_by('sku')[number]
-#     form = OrderUpdateForm(request.POST or None, instance=sku_sorted)
-#
-#     if form.is_valid():
-#         form.save()
-#
-#     context = {'form': form}
-#
-#     return render(request, 'pack/detail.html', context)
+def sku_view(request, sku):
+    sku_sorted = Order.objects.order_by('sku')
+    return None

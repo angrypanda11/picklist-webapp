@@ -9,7 +9,7 @@ PICKED = [
 
 
 class OrderUpdateForm(forms.ModelForm):
-    picked = forms.ChoiceField(widget=forms.RadioSelect, choices=PICKED)
+    picked = forms.ChoiceField(required=False, widget=forms.RadioSelect, choices=PICKED)
     notes = forms.CharField(required=False)
 
     class Meta:

@@ -7,7 +7,7 @@ class Order(models.Model):
     order_number = models.CharField(max_length=50)
     sku = models.CharField(max_length=50)
     quantity = models.IntegerField(default=0)
-    picked = models.CharField(max_length=10, default='未捡')
+    picked = models.CharField(max_length=5, default='')
     notes = models.CharField(max_length=300, default='')
 
     def __str__(self):

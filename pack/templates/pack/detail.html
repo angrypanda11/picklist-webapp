@@ -9,7 +9,6 @@
 
 <ul>
     <li>串号: {{ order.batch_id }}</li>
-    <li>单号: {{ order.order_number }}</li>
     <li>SKU: {{ order.sku }}</li>
     <li>数量: {{ order.quantity }}</li>
     <li>状态: {{ order.picked }}</li>
@@ -20,7 +19,13 @@
     {{ form.as_p }}
     <input type="submit" value="Save" />
 </form>
+<br>
 
+
+{{ number }} / {{ total }}
+
+<br>
+<br>
 <a class="btn btn-delete" href="{% url 'detail' prev %}">上一单</a>
 <a class="btn btn-primary" href="{% url 'detail' next %}">下一单</a>
 
