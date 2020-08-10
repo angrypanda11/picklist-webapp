@@ -11,4 +11,4 @@ class Order(models.Model):
     notes = models.CharField(max_length=300, default='')
 
     def __str__(self):
-        return self.batch_id
+        return self.order_number

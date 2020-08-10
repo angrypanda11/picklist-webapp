@@ -1,13 +1,11 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from .models import Order
 from django.contrib import messages
 from .forms import OrderUpdateForm
 from django.http import HttpResponse
+from urllib.parse import *
 import io
 import csv
-# from django.views import generic
-# from tablib import Dataset
-# from .resources import OrderResource
 
 
 def upload(request):
@@ -28,7 +26,7 @@ def upload(request):
     io_string = io.StringIO(order_list)
     next(io_string)
     for column in csv.reader(io_string, delimiter=','):
-        # print(column[76])
+
         _, created = Order.objects.update_or_create(
             batch_id=column[105],
             order_number=column[63],
@@ -41,12 +39,20 @@ def upload(request):
 
 
 def all_orders(request):
-    sku_sorted = Order.objects.order_by('sku')
-    # first_item = sku_sorted.values_list('sku', flat=True)[0]
+    sku_list = Order.objects.order_by('sku').values_list('sku', flat=True)
+    unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
+    if len(unique_sku) > 0:
+        first_sku = unique_sku[0]
+    else:
+        first_sku = 'skunotavailable'
+    copy = []
+    for item in range(len(sku_list)):
+        copy.append(quote(sku_list[item], safe=''))
 
     context = {
-        'sorted': sku_sorted,
-        # 'first': first_item
+        'all': zip(Order.objects.order_by('sku'), copy),
+        'first': quote(first_sku, safe=''),
+        # 'sku_link': sku_list
     }
     return render(request, 'pack/all.html', context)
 
@@ -77,5 +83,42 @@ def detail(request, number):
 
 
 def sku_view(request, sku):
-    sku_sorted = Order.objects.order_by('sku')
-    return None
+    if unquote(sku) == 'skunotavailable':
+        return HttpResponse("No Matching SKUs")
+
+    sku = unquote(sku)
+
+    sku_filter = Order.objects.filter(sku=sku)
+    total_quantity = sum(sku_filter.values_list('quantity', flat=True))
+
+    unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
+
+    if unique_sku.index(sku) == 0:
+        if len(unique_sku) == 1:
+            prev = unique_sku[0]
+            after = unique_sku[0]
+        else:
+            prev = unique_sku[len(unique_sku)-1]
+            after = unique_sku[1]
+
+    elif unique_sku.index(sku) == len(unique_sku)-1:
+        if len(unique_sku) == 1:
+            prev = unique_sku[0]
+            after = unique_sku[0]
+        else:
+            prev = unique_sku[len(unique_sku) - 2]
+            after = unique_sku[0]
+    else:
+        prev = unique_sku[unique_sku.index(sku)-1]
+        after = unique_sku[unique_sku.index(sku)+1]
+
+    context = {
+        'sku': sku_filter[0],
+        'total': total_quantity,
+        'prev': quote(prev, safe=''),
+        'after': quote(after, safe=''),
+        'sku_count': len(unique_sku),
+        'sku_index': unique_sku.index(sku) + 1
+    }
+
+    return render(request, 'pack/sku.html', context)

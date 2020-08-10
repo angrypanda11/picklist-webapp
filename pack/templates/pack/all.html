@@ -12,7 +12,7 @@
 
 <br>
 <br>
-<a class="btn btn-primary" href="{% url 'detail' 1 %}">浏览PICKLIST</a>
+<a class="btn btn-primary" href="{% url 'sku' first %}">浏览PICKLIST</a>
 
 <br>
 <br>
@@ -37,17 +37,16 @@
         <th>订单号</th>
         <th>sku</th>
         <th>数量</th>
-        <th>状态</th>
+
         <th>备注</th>
 
     </tr>
-    {% for order in sorted %}
+    {% for order, sku in all %}
     <tr>
         <td>{{ order.batch_id }}</td>
         <td>{{ order.order_number }}</td>
-        <td>{{ order.sku }}</td>
+        <td><a href="{% url 'sku' sku %}">{{ order.sku }}</a></td>
         <td>{{ order.quantity }}</td>
-        <td>{{ order.picked }}</td>
         <td>{{ order.notes }}</td>
 
     </tr>
