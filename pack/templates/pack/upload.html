@@ -36,4 +36,10 @@
 <input type="text" id="in"/>
 <input type="button" onclick="goToPage();" value="搜索"/>
 
+<br>
+<br>
+<br>
+
+<a class="btn btn-primary" onclick="return confirm('确认删除所有订单?')" href="{% url 'delete' %}">删除所有订单</a>
+
 {% endblock %}

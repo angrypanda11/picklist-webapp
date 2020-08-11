@@ -6,9 +6,8 @@ from . import views
 urlpatterns = [
     path('', views.upload, name='upload'),
     path('all/', views.all_orders, name='all'),
-    path('<number>/', views.detail, name='detail'),
+    path('page/<number>/', views.detail, name='detail'),
     path('sku/<sku>/', views.sku_view, name='sku'),
+    path('delete/', views.delete_all, name='delete'),
 
-    # path('<int:question_id>/vote/', views.vote, name='vote'),
-    # path('shot/past', views.PastShot, name='past_shot')
 ]

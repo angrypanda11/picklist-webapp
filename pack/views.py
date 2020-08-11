@@ -57,6 +57,14 @@ def all_orders(request):
     return render(request, 'pack/all.html', context)
 
 
+def delete_all(request):
+    Order.objects.all().delete()
+    context = {
+        'msg': '以删除所有订单'
+    }
+    return render(request, 'pack/delete.html', context)
+
+
 def detail(request, number):
     number = int(number)
     sku_sorted = Order.objects.order_by('sku')
