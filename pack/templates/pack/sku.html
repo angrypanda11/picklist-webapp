@@ -20,4 +20,18 @@
 <a class="btn btn-delete" href="{% url 'sku' prev %}">上一单</a>
 <a class="btn btn-primary" href="{% url 'sku' after %}">下一单</a>
 
+<br>
+<br>
+
+<table>
+    <tr>
+        <th>订单号</th>
+    </tr>
+    {% for num in order_numbers %}
+    <tr>
+        <td><a href="{% url 'detail' num %}">{{ num }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
 {% endblock %}

@@ -20,7 +20,6 @@
 <script type="text/javascript">
     function goToPage(){
         var page=document.getElementById('in').value; // value of input box
-        page=page*1; // ensures page is numeric only
         location.href='https://picklist-app.herokuapp.com/pack/'+page; // redirect to new url
     }
 </script>
@@ -37,7 +36,6 @@
         <th>订单号</th>
         <th>sku</th>
         <th>数量</th>
-
         <th>备注</th>
 
     </tr>

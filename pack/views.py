@@ -52,7 +52,7 @@ def all_orders(request):
     context = {
         'all': zip(Order.objects.order_by('sku'), copy),
         'first': quote(first_sku, safe=''),
-        # 'sku_link': sku_list
+
     }
     return render(request, 'pack/all.html', context)
 
@@ -66,12 +66,14 @@ def delete_all(request):
 
 
 def detail(request, number):
-    number = int(number)
-    sku_sorted = Order.objects.order_by('sku')
 
-    if sku_sorted.count() < number or number < 1:
+    sku_sorted = Order.objects.order_by('sku')
+    sku_sorted_order = list(sku_sorted.values_list('order_number', flat=True))
+
+    if number not in sku_sorted_order:
         return HttpResponse("Invalid page, return to last page")
-    sku_index = sku_sorted[number-1]
+    order_number_query = Order.objects.filter(order_number=number)
+    sku_index = order_number_query[0]
 
     form = OrderUpdateForm(request.POST or None, instance=sku_index)
 
@@ -79,11 +81,30 @@ def detail(request, number):
         form.save()
         form = OrderUpdateForm()
 
+    if sku_sorted_order.index(number) == 0:
+        if len(sku_sorted_order) == 1:
+            prev = sku_sorted_order[0]
+            after = sku_sorted_order[0]
+        else:
+            prev = sku_sorted_order[len(sku_sorted_order)-1]
+            after = sku_sorted_order[1]
+
+    elif sku_sorted_order.index(number) == len(sku_sorted_order)-1:
+        if len(sku_sorted_order) == 1:
+            prev = sku_sorted_order[0]
+            after = sku_sorted_order[0]
+        else:
+            prev = sku_sorted_order[len(sku_sorted_order) - 2]
+            after = sku_sorted_order[0]
+    else:
+        prev = sku_sorted_order[sku_sorted_order.index(number)-1]
+        after = sku_sorted_order[sku_sorted_order.index(number)+1]
+
     context = {
         'order': sku_index,
-        'next': number+1,
-        'prev': number-1,
-        'number': number,
+        'next': after,
+        'prev': prev,
+        'number': sku_sorted_order.index(number)+1,
         'total': sku_sorted.count(),
         'form': form
     }
@@ -97,6 +118,7 @@ def sku_view(request, sku):
     sku = unquote(sku)
 
     sku_filter = Order.objects.filter(sku=sku)
+    order_numbers = list(sku_filter.values_list('order_number', flat=True))
     total_quantity = sum(sku_filter.values_list('quantity', flat=True))
 
     unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
@@ -125,6 +147,7 @@ def sku_view(request, sku):
         'total': total_quantity,
         'prev': quote(prev, safe=''),
         'after': quote(after, safe=''),
+        'order_numbers': order_numbers,
         'sku_count': len(unique_sku),
         'sku_index': unique_sku.index(sku) + 1
     }
