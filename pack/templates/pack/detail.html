@@ -9,7 +9,7 @@
 
 <ul>
     <li>串号: {{ order.batch_id }}</li>
-    <li>SKU: {{ order.sku }}</li>
+    <li>SKU: <a href="{% url 'sku' sku %}">{{ order.sku }}</a></li>
     <li>数量: {{ order.quantity }}</li>
     <li>状态: {{ order.picked }}</li>
 

@@ -16,11 +16,14 @@
 
 <br>
 <br>
+<a class="btn btn-primary" href="{% url 'dict' %}">产品字典</a>
+<br>
+<br>
 
 <script type="text/javascript">
     function goToPage(){
         var page=document.getElementById('in').value; // value of input box
-        location.href='https://picklist-app.herokuapp.com/pack/'+page; // redirect to new url
+        location.href='https://picklist-app.herokuapp.com/pack/page/'+page; // redirect to new url
     }
 </script>
 <input type="text" id="in"/>

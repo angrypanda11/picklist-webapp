@@ -29,8 +29,7 @@
 <script type="text/javascript">
     function goToPage(){
         var page=document.getElementById('in').value; // value of input box
-        page=page*1; // ensures page is numeric only
-        location.href='https://picklist-app.herokuapp.com/pack/'+page; // redirect to new url
+        location.href='https://picklist-app.herokuapp.com/pack/page/'+page; // redirect to new url
     }
 </script>
 <input type="text" id="in"/>
@@ -41,5 +40,10 @@
 <br>
 
 <a class="btn btn-primary" onclick="return confirm('确认删除所有订单?')" href="{% url 'delete' %}">删除所有订单</a>
+
+<br>
+<br>
+
+<a class="btn btn-primary" href="{% url 'dict' %}">产品字典</a>
 
 {% endblock %}

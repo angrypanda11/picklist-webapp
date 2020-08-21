@@ -1,13 +1,14 @@
 from django.shortcuts import render
-from .models import Order
+from .models import Order, Dictionary
 from django.contrib import messages
-from .forms import OrderUpdateForm
+from .forms import OrderUpdateForm, DictionaryUpdateForm
 from django.http import HttpResponse
 from urllib.parse import *
 import io
 import csv
 
 
+# ******** PICKLIST VIEWS **********
 def upload(request):
     template = "pack/upload.html"
     prompt = {
@@ -102,6 +103,7 @@ def detail(request, number):
 
     context = {
         'order': sku_index,
+        'sku': quote(sku_index.sku, safe=''),
         'next': after,
         'prev': prev,
         'number': sku_sorted_order.index(number)+1,
@@ -153,3 +155,63 @@ def sku_view(request, sku):
     }
 
     return render(request, 'pack/sku.html', context)
+
+
+# ******** DICTIONARY VIEWS **********
+unregistered = []
+
+
+def dictionary(request):
+    # unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
+    # registered = []
+    #
+    # for sku in unique_sku:
+    #     if Dictionary.objects.filter(sku=sku).count() != 0:
+    #         registered.append(Dictionary.objects.get(sku=sku))
+    registered = Dictionary.objects.order_by('sku')
+
+    context = {
+        'registered': registered,
+    }
+
+    return render(request, 'pack/dictionary.html', context)
+
+
+def dictionary_update(request):
+
+    unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
+
+    for sku in unique_sku:
+        if Dictionary.objects.filter(sku=sku).count() == 0:
+            unregistered.append(sku)
+    for sku in unregistered:
+        if Dictionary.objects.filter(sku=sku).count() != 0:
+            unregistered.remove(sku)
+
+    form = DictionaryUpdateForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = DictionaryUpdateForm
+
+    context = {
+        'form': form,
+        'unregistered': unregistered,
+    }
+    return render(request, 'pack/dict_update.html', context)
+
+
+def download_update(request):
+    unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
+
+    for sku in unique_sku:
+        if Dictionary.objects.filter(sku=sku).count() == 0:
+            unregistered.append(sku)
+    for sku in unregistered:
+        if Dictionary.objects.filter(sku=sku).count() != 0:
+            unregistered.remove(sku)
+
+    context = {
+        # 'form': form,
+        'unregistered': unregistered,
+    }
+    return render(request, 'pack/download_update.html', context)

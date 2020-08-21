@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Order
+from .models import Order, Dictionary
 
 PICKED = [
         ('以捡', '以捡'),
@@ -17,4 +17,15 @@ class OrderUpdateForm(forms.ModelForm):
         fields = [
             'picked',
             'notes',
+        ]
+
+
+class DictionaryUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Dictionary
+        fields = [
+            'sku',
+            'product_code',
+            'multiplier',
+            'price',
         ]

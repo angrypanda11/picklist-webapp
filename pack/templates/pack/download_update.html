@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.container {
+  width: 100%;
+  clear: both;
+}
+
+.container input {
+  width: 100%;
+  clear: both;
+}
+</style>
+
+<a class="btn btn-primary" href="{% url 'upload' %}">主页</a>
+
+<br>
+<br>
+
+<a class="btn btn-primary">下载出库单</a>
+
+<br>
+<br>
+
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+
+<form method='POST'> {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="添加" />
+</form>
+
+<br>
+<br>
+
+<table>
+    <tr>
+        <th>sku</th>
+    </tr>
+    {% for entry in unregistered %}
+    <tr>
+        <td>{{ entry }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
+
+<td><a href="{% url 'sku' sku %}">{{ order.sku }}</a></td>

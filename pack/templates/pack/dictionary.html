@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+
+<a class="btn btn-primary" href="{% url 'upload' %}">主页</a>
+
+<br>
+<br>
+
+<table>
+    <tr>
+        <th>sku</th>
+        <th>商品编号</th>
+        <th>乘数</th>
+        <th>价格</th>
+
+
+    </tr>
+    {% for entry in registered %}
+    <tr>
+        <td>{{ entry.sku }}</td>
+        <td>{{ entry.product_code }}</td>
+        <td>{{ entry.multiplier }}</td>
+        <td>{{ entry.price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<br>
+{% endblock %}
+
+<td><a href="{% url 'sku' sku %}">{{ order.sku }}</a></td>

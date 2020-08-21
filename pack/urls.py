@@ -9,5 +9,8 @@ urlpatterns = [
     path('page/<number>/', views.detail, name='detail'),
     path('sku/<sku>/', views.sku_view, name='sku'),
     path('delete/', views.delete_all, name='delete'),
+    path('dict/', views.dictionary, name='dict'),
+    path('dict/update', views.dictionary_update, name='dict_update'),
+    path('download', views.download_update, name='download'),
 
 ]
