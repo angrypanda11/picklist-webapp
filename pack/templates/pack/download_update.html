@@ -28,19 +28,12 @@ table, th, td {
 <br>
 <br>
 
-<script>
-    if ( window.history.replaceState ) {
-        window.history.replaceState( null, null, window.location.href );
-    }
-</script>
-
-<form method='POST'> {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="添加" />
-</form>
+<a class="btn btn-primary" href="{% url 'dict_update' %}">注册不明SKU</a>
 
 <br>
 <br>
+
+<h3>不明SKU</h3>
 
 <table>
     <tr>
@@ -56,3 +49,15 @@ table, th, td {
 {% endblock %}
 
 <td><a href="{% url 'sku' sku %}">{{ order.sku }}</a></td>
+
+
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+
+<form method='POST'> {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="添加" />
+</form>

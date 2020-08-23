@@ -22,3 +22,21 @@ class Dictionary(models.Model):
 
     def __str__(self):
         return self.sku
+
+
+class Entry(models.Model):
+    sku = models.CharField(max_length=60)
+
+    def __str__(self):
+        return self.sku
+
+
+class Product(models.Model):
+    sku = models.ForeignKey(Entry, on_delete=models.CASCADE)
+    product_code = models.CharField(max_length=50)
+    multiplier = models.IntegerField(default=0)
+    price = models.DecimalField(default=0, max_digits=7, decimal_places=2)
+    # discount = models.DecimalField(default=1, max_digits=3, decimal_places=2)
+
+    def __str__(self):
+        return self.product_code

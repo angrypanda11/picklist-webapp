@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Order, Dictionary
+from .models import Order, Dictionary, Entry, Product
 from django.contrib import messages
 from .forms import OrderUpdateForm, DictionaryUpdateForm
 from django.http import HttpResponse
@@ -11,12 +11,8 @@ import csv
 # ******** PICKLIST VIEWS **********
 def upload(request):
     template = "pack/upload.html"
-    prompt = {
-        'ID': 'Please only submit .csv files'
-    }
-
     if request.method == 'GET':
-        return render(request, template, prompt)
+        return render(request, template)
 
     csv_file = request.FILES['myfile']
 
@@ -182,10 +178,10 @@ def dictionary_update(request):
     unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
 
     for sku in unique_sku:
-        if Dictionary.objects.filter(sku=sku).count() == 0:
+        if Entry.objects.filter(sku=sku).count() == 0:
             unregistered.append(sku)
     for sku in unregistered:
-        if Dictionary.objects.filter(sku=sku).count() != 0:
+        if Entry.objects.filter(sku=sku).count() != 0:
             unregistered.remove(sku)
 
     form = DictionaryUpdateForm(request.POST or None)
@@ -204,10 +200,10 @@ def download_update(request):
     unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
 
     for sku in unique_sku:
-        if Dictionary.objects.filter(sku=sku).count() == 0:
+        if Entry.objects.filter(sku=sku).count() == 0:
             unregistered.append(sku)
     for sku in unregistered:
-        if Dictionary.objects.filter(sku=sku).count() != 0:
+        if Entry.objects.filter(sku=sku).count() != 0:
             unregistered.remove(sku)
 
     context = {
