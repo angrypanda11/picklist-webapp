@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from urllib.parse import *
 import io
 import csv
-import xlwt
+# import xlwt
 
 
 # ******** PICKLIST VIEWS **********
@@ -216,33 +216,33 @@ def download_update(request):
     return render(request, template, context)
 
 
-def export_update(request):
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="updates.xls"'
-
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Updates')  # this will make a sheet named Users Data
-
-    # Sheet header, first row
-    row_num = 0
-
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-
-    columns = ['product_code', 'price', 'discount', 'quantity']
-
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)  # at 0 row 0 column
-
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
-
-    rows = Export.objects.all().values_list('product_code', 'price', 'discount', 'quantity')
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
-
-    wb.save(response)
-
-    return response
+# def export_update(request):
+#     response = HttpResponse(content_type='application/ms-excel')
+#     response['Content-Disposition'] = 'attachment; filename="updates.xls"'
+#
+#     wb = xlwt.Workbook(encoding='utf-8')
+#     ws = wb.add_sheet('Updates')  # this will make a sheet named Users Data
+#
+#     # Sheet header, first row
+#     row_num = 0
+#
+#     font_style = xlwt.XFStyle()
+#     font_style.font.bold = True
+#
+#     columns = ['product_code', 'price', 'discount', 'quantity']
+#
+#     for col_num in range(len(columns)):
+#         ws.write(row_num, col_num, columns[col_num], font_style)  # at 0 row 0 column
+#
+#     # Sheet body, remaining rows
+#     font_style = xlwt.XFStyle()
+#
+#     rows = Export.objects.all().values_list('product_code', 'price', 'discount', 'quantity')
+#     for row in rows:
+#         row_num += 1
+#         for col_num in range(len(row)):
+#             ws.write(row_num, col_num, row[col_num], font_style)
+#
+#     wb.save(response)
+#
+#     return response

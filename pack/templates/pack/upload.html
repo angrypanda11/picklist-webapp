@@ -39,12 +39,13 @@
 <a class="btn btn-primary" onclick="return confirm('确认删除所有订单?')" href="{% url 'delete' %}">删除所有订单</a>
 <br>
 <br>
-<a class="btn btn-primary" href="{% url 'download' %}">下载出库表</a>
+
 {% endblock %}
 
-<a class="btn btn-primary" href="{% url 'download' %}">下载出库表</a>
+
 
 <br>
 <br>
 
 <a class="btn btn-primary" href="{% url 'dict' %}">产品字典</a>
+<a class="btn btn-primary" href="{% url 'download' %}">下载出库表</a>
