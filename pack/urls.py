@@ -12,5 +12,6 @@ urlpatterns = [
     path('dict/', views.dictionary, name='dict'),
     path('dict/update', views.dictionary_update, name='dict_update'),
     path('download', views.download_update, name='download'),
+    path('export/update', views.export_update, name='export_update'),
 
 ]

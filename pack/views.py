@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from .models import Order, Dictionary, Entry, Product
+from .models import Order, Export
 from django.contrib import messages
-from .forms import OrderUpdateForm, DictionaryUpdateForm
+from .forms import OrderUpdateForm
 from django.http import HttpResponse
 from urllib.parse import *
 import io
 import csv
+import xlwt
 
 
 # ******** PICKLIST VIEWS **********
@@ -154,7 +155,7 @@ def sku_view(request, sku):
 
 
 # ******** DICTIONARY VIEWS **********
-unregistered = []
+
 
 
 def dictionary(request):
@@ -164,10 +165,10 @@ def dictionary(request):
     # for sku in unique_sku:
     #     if Dictionary.objects.filter(sku=sku).count() != 0:
     #         registered.append(Dictionary.objects.get(sku=sku))
-    registered = Dictionary.objects.order_by('sku')
+    # registered = Entry.objects.order_by('sku')
 
     context = {
-        'registered': registered,
+        # 'registered': registered,
     }
 
     return render(request, 'pack/dictionary.html', context)
@@ -175,39 +176,73 @@ def dictionary(request):
 
 def dictionary_update(request):
 
-    unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
-
-    for sku in unique_sku:
-        if Entry.objects.filter(sku=sku).count() == 0:
-            unregistered.append(sku)
-    for sku in unregistered:
-        if Entry.objects.filter(sku=sku).count() != 0:
-            unregistered.remove(sku)
-
-    form = DictionaryUpdateForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        form = DictionaryUpdateForm
+    # unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
+    # unregistered = []
+    #
+    # for sku in unique_sku:
+    #     if Entry.objects.filter(sku=sku).count() == 0:
+    #         unregistered.append(sku)
+    # for sku in unregistered:
+    #     if Entry.objects.filter(sku=sku).count() != 0:
+    #         unregistered.remove(sku)
 
     context = {
-        'form': form,
-        'unregistered': unregistered,
+        # 'unregistered': unregistered,
     }
     return render(request, 'pack/dict_update.html', context)
 
 
 def download_update(request):
-    unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
+    template = 'pack/download_update.html'
+    # unique_sku = sorted(set(Order.objects.values_list('sku', flat=True)))
+    #
+    # unregistered = []
+    #
+    # for sku in unique_sku:
+    #     if Entry.objects.filter(sku=sku).count() == 0:
+    #         unregistered.append(sku)
+    # for sku in unregistered:
+    #     if Entry.objects.filter(sku=sku).count() != 0:
+    #         unregistered.remove(sku)
 
-    for sku in unique_sku:
-        if Entry.objects.filter(sku=sku).count() == 0:
-            unregistered.append(sku)
-    for sku in unregistered:
-        if Entry.objects.filter(sku=sku).count() != 0:
-            unregistered.remove(sku)
-
+    # list_a = Entry.objects.order_by('sku')[0]
+    # list_b = Product.objects.all()
+    # for i in list_a:
+    #     i.additional_data = [b for b in list_b if b.model_link_id == i.id]
     context = {
-        # 'form': form,
-        'unregistered': unregistered,
+        # 'unregistered': unregistered,
+
     }
-    return render(request, 'pack/download_update.html', context)
+    return render(request, template, context)
+
+
+def export_update(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="updates.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Updates')  # this will make a sheet named Users Data
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['product_code', 'price', 'discount', 'quantity']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)  # at 0 row 0 column
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = Export.objects.all().values_list('product_code', 'price', 'discount', 'quantity')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+
+    return response
